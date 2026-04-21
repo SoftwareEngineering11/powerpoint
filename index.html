@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ورشة تصميم ألعاب تعليمية بالبوربوينت</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: "Cairo", sans-serif; background: #F0EDE8; min-height: 100vh; color: #2C2C2C; }
+
+.hero {
+  background: #F0EDE8;
+  padding: 60px 20px 110px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: -2px; left: 0; right: 0;
+  height: 60px;
+  background: #F0EDE8;
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+.logo-img {
+  width: 140px; height: 140px;
+  object-fit: contain;
+  margin-bottom: 16px;
+  background: transparent;
+}
+.hero h1 {
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 900; color: #2C2C2C;
+  line-height: 1.25; max-width: 640px;
+  margin: 0 auto 16px;
+}
+.hero h1 em { font-style: normal; color: #3A9BB5; }
+.hero p {
+  color: #7A7068; font-size: 16px;
+  max-width: 440px; margin: 0 auto 36px;
+  line-height: 1.85; font-weight: 300;
+}
+.info-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.info-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: white; border: 1px solid #DDD8D2; color: #5A5048;
+  padding: 10px 18px; border-radius: 3px; font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.main { max-width: 500px; margin: -24px auto 0; padding: 0 20px 80px; }
+
+.form-card {
+  background: white; border: 1px solid #DDD8D2; border-radius: 4px;
+  overflow: hidden; box-shadow: 0 8px 40px rgba(44,36,30,0.08);
+}
+.form-card-top { background: #2C2C2C; padding: 26px 30px; text-align: center; }
+.form-card-top h3 { color:#FAFAF8; font-size:19px; font-weight:700; margin-bottom:5px; }
+.form-card-top p { color:rgba(255,255,255,0.45); font-size:13px; }
+.deadline-badge {
+  margin-top: 10px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 8px 14px;
+  display: inline-block;
+}
+
+.form-body { padding: 28px 30px; }
+.form-group { margin-bottom: 18px; }
+.form-group > label { display:block; font-size:13px; font-weight:700; color:#2C2C2C; margin-bottom:7px; }
+
+input, select, textarea {
+  width:100%; padding:12px 15px;
+  border: 1.5px solid #DDD8D2; border-radius:3px;
+  font-family:"Cairo",sans-serif; font-size:14px;
+  color:#2C2C2C; background:#FAFAF8; outline:none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  -webkit-appearance:none;
+}
+textarea { resize: none; }
+input::placeholder, textarea::placeholder { color:#B8B0A8; font-weight:300; }
+input:focus, select:focus, textarea:focus {
+  border-color:#3A9BB5; background:white;
+  box-shadow:0 0 0 3px rgba(58,155,181,0.1);
+}
+.select-wrap { position:relative; }
+.select-wrap::after {
+  content:"▾"; position:absolute; left:13px; top:50%;
+  transform:translateY(-50%); color:#9A8878; font-size:13px; pointer-events:none;
+}
+
+/* ====== PACKAGE CARDS ====== */
+.package-options { display: flex; flex-direction: column; gap: 10px; }
+
+.pkg {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 2px solid #DDD8D2;
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  background: #FAFAF8;
+  transition: all 0.2s;
+  user-select: none;
+}
+.pkg:hover { border-color: #3A9BB5; background: #f5fbfd; }
+.pkg.active { border-color: #3A9BB5; background: #eef8fc; box-shadow: 0 0 0 3px rgba(58,155,181,0.12); }
+
+.pkg-dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid #CCC; flex-shrink: 0;
+  background: white; position: relative; transition: all 0.2s;
+}
+.pkg.active .pkg-dot { border-color: #3A9BB5; background: #3A9BB5; }
+.pkg.active .pkg-dot::after {
+  content: ""; width: 8px; height: 8px; border-radius: 50%;
+  background: white; position: absolute;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+.pkg-emoji { font-size: 28px; flex-shrink: 0; }
+.pkg-text { flex: 1; }
+.pkg-title { font-weight: 800; font-size: 14px; color: #2C2C2C; margin-bottom: 3px; }
+.pkg-items { font-size: 12px; color: #7A7068; }
+.pkg-price {
+  background: #3A9BB5; color: white;
+  font-weight: 900; font-size: 14px;
+  padding: 6px 14px; border-radius: 20px; flex-shrink: 0;
+}
+.pkg.active .pkg-price { background: #2C7A90; }
+/* ============================ */
+
+.divider { height:1px; background:#F0ECE7; margin:22px 0; }
+
+.btn-submit {
+  width:100%; padding:15px;
+  background:#2C2C2C; color:white; border:none; border-radius:3px;
+  font-family:"Cairo",sans-serif; font-size:16px; font-weight:700;
+  cursor:pointer; transition: all 0.25s;
+}
+.btn-submit:hover { background:#3A9BB5; transform:translateY(-1px); box-shadow:0 8px 25px rgba(58,155,181,0.3); }
+.btn-submit:disabled { background:#AAA; cursor:not-allowed; transform:none; box-shadow:none; }
+.privacy-note { text-align:center; font-size:12px; color:#A8A098; margin-top:12px; }
+
+/* ====== POPUP ====== */
+.popup-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55); z-index: 1000;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.popup-overlay.show { display: flex; animation: fadeOverlay 0.3s ease; }
+@keyframes fadeOverlay { from{opacity:0} to{opacity:1} }
+.popup-box {
+  background: white; border-radius: 20px; padding: 40px 32px;
+  max-width: 360px; width: 100%; text-align: center;
+  animation: popIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+@keyframes popIn {
+  from { opacity:0; transform:scale(0.7) translateY(30px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
+}
+.popup-icon {
+  width: 80px; height: 80px;
+  background: linear-gradient(135deg, #3A9BB5, #2C7A90);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; margin: 0 auto 20px;
+  box-shadow: 0 8px 25px rgba(58,155,181,0.35);
+  animation: bounceIn 0.6s 0.2s both;
+}
+@keyframes bounceIn {
+  0%   { transform: scale(0); }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.popup-title { font-size: 20px; font-weight: 900; color: #2C2C2C; margin-bottom: 10px; }
+.popup-msg { font-size: 14px; color: #7A7068; line-height: 1.9; margin-bottom: 28px; }
+.popup-close {
+  background: none; border: 1.5px solid #DDD8D2; color: #7A7068;
+  border-radius: 10px; padding: 13px; width: 100%;
+  font-family: "Cairo",sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s;
+}
+.popup-close:hover { background: #2C2C2C; color: white; border-color: #2C2C2C; }
+/* =================== */
+
+.success-view { display:none; padding:44px 30px; text-align:center; }
+.success-check {
+  width:70px; height:70px; background:#3A9BB5; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 22px; font-size:30px; color:white;
+}
+.success-title { font-size:20px; font-weight:800; color:#2C2C2C; margin-bottom:10px; }
+.success-msg { color:#7A7068; font-size:14px; line-height:1.85; margin-bottom:28px; }
+.btn-again {
+  background:none; border:1.5px solid #DDD8D2; color:#7A7068;
+  padding:11px 24px; border-radius:3px;
+  font-family:"Cairo",sans-serif; font-size:13px; cursor:pointer;
+  width:100%; transition:all 0.2s;
+}
+.btn-again:hover { border-color:#2C2C2C; color:#2C2C2C; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>ورشة تصميم ألعاب تعليمية<br>بـ <em>البوربوينت</em></h1>
+  <p>ورشة عملية تمكّنك من تصميم ألعاب تفاعلية احترافية داخل شرائح البوربوينت — بدون برامج إضافية</p>
+  <div class="info-row">
+    <div class="info-chip">🎮 تطبيق عملي</div>
+    <div class="info-chip">📁 ملفات جاهزة</div>
+    <div class="info-chip">💻 أونلاين</div>
+    <div class="info-chip">🎓 شهادة حضور</div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="form-card" id="formCard">
+    <div id="formView">
+      <div class="form-card-top">
+        <h3>سجّل مكانك الآن</h3>
+        <p>الأماكن محدودة — لا تفوّت الفرصة</p>
+        <div class="deadline-badge">
+          <span style="color:#f0c97a; font-size:13px; font-weight:700;">⏳ ينتهي التسجيل: الثلاثاء 28 أبريل 2026 — الساعة 12:00 ظهراً</span>
+        </div>
+      </div>
+      <div class="form-body">
+
+        <div class="form-group">
+          <label>الاسم الكامل *</label>
+          <input type="text" id="name" placeholder="أدخل اسمك الكامل">
+        </div>
+
+        <div class="form-group">
+          <label>رقم الواتساب *</label>
+          <input type="tel" id="phone" placeholder="مثال: 96891234567">
+        </div>
+
+        <!-- ✅ حقل الإيميل الجديد -->
+        <div class="form-group">
+          <label>البريد الإلكتروني *</label>
+          <input type="email" id="email" placeholder="example@gmail.com">
+        </div>
+
+        <div class="form-group">
+          <label>المسمى الوظيفي *</label>
+          <div class="select-wrap">
+            <select id="role">
+              <option value="" disabled selected>اختر المسمى</option>
+              <option>معلم / معلمة</option>
+              <option>مدرب / مدربة تربوية</option>
+              <option>مشرف / مشرفة تربوية</option>
+              <option>طالب / طالبة جامعي</option>
+              <option>أخرى</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>اختر الباقة *</label>
+          <div class="package-options">
+            <div class="pkg" id="pkg1" onclick="pickPkg('pkg1','الباقة الأساسية (2 ريال)')">
+              <div class="pkg-dot"></div>
+              <div class="pkg-emoji">📁</div>
+              <div class="pkg-text">
+                <div class="pkg-title">الباقة الأساسية</div>
+                <div class="pkg-items">ملف + ملخص</div>
+              </div>
+              <div class="pkg-price">2 ريال</div>
+            </div>
+            <div class="pkg" id="pkg2" onclick="pickPkg('pkg2','الباقة المتقدمة (4 ريال)')">
+              <div class="pkg-dot"></div>
+              <div class="pkg-emoji">🎓</div>
+              <div class="pkg-text">
+                <div class="pkg-title">الباقة المتقدمة</div>
+                <div class="pkg-items">حضور + ملف + ملخص + شهادة</div>
+              </div>
+              <div class="pkg-price">4 ريال</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>ملاحظات <span style="font-weight:300;color:#9A8878">(اختياري)</span></label>
+          <textarea id="notes" rows="3" placeholder="أي ملاحظات إضافية..."></textarea>
+        </div>
+
+        <div class="divider"></div>
+        <button class="btn-submit" id="submitBtn" onclick="submitForm()">تأكيد التسجيل ←</button>
+        <p class="privacy-note">🔒 بياناتك محمية ولن تُشارك مع أي جهة</p>
+      </div>
+    </div>
+
+    <div class="success-view" id="successView">
+      <div class="success-check">✓</div>
+      <div class="success-title">تم استلام تسجيلك بنجاح 🎉</div>
+      <div class="success-msg">سيتم التواصل معك عبر الواتساب<br>لتأكيد الحجز وإرسال التفاصيل 🤍</div>
+      <button class="btn-again" onclick="registerAnother()">+ تسجيل شخص آخر</button>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="popupOverlay">
+  <div class="popup-box">
+    <div class="popup-icon">🎉</div>
+    <div class="popup-title">تم استلام تسجيلك بنجاح!</div>
+    <div class="popup-msg">
+      تم إرسال رسالة ترحيب إلى بريدك الإلكتروني 📩<br>
+      وسيتم التواصل معك عبر الواتساب قريباً 🤍
+    </div>
+    <button class="popup-close" onclick="closePopup()">حسناً 👌</button>
+  </div>
+</div>
+
+<script>
+  var selectedPkg = "";
+
+  function pickPkg(id, val) {
+    selectedPkg = val;
+    document.querySelectorAll('.pkg').forEach(function(p){ p.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+  }
+
+  function playDing() {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      var o = ctx.createOscillator();
+      var g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.setValueAtTime(880, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1);
+      g.gain.setValueAtTime(0.4, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      o.start(ctx.currentTime);
+      o.stop(ctx.currentTime + 0.5);
+    } catch(e){}
+  }
+
+  // الموعد النهائي
+  var DEADLINE = new Date("2026-04-28T12:00:00+04:00");
+
+  function checkDeadline() {
+    if (new Date() >= DEADLINE) {
+      var fv = document.getElementById("formView");
+      if (fv) {
+        fv.innerHTML =
+          '<div style="padding:50px 30px;text-align:center;">' +
+          '<div style="font-size:52px;margin-bottom:16px;">🔒</div>' +
+          '<div style="font-size:19px;font-weight:800;color:#2C2C2C;margin-bottom:12px;">انتهى التسجيل</div>' +
+          '<div style="font-size:14px;color:#7A7068;line-height:1.9;">انتهى التسجيل في ورشة الألعاب التعليمية<br>تابعونا للاطلاع على الورش القادمة 🎓</div>' +
+          '</div>';
+      }
+    }
+  }
+
+  checkDeadline();
+  setInterval(checkDeadline, 10000);
+
+  function submitForm() {
+    if (new Date() >= DEADLINE) {
+      alert("انتهى وقت التسجيل");
+      checkDeadline();
+      return;
+    }
+
+    var name  = document.getElementById("name").value.trim();
+    var phone = document.getElementById("phone").value.trim();
+    var email = document.getElementById("email").value.trim();
+    var role  = document.getElementById("role").value;
+    var notes = document.getElementById("notes").value.trim();
+
+    if (!name || !phone || !email || !role) {
+      alert("يرجى ملء جميع الحقول المطلوبة (*)");
+      return;
+    }
+    if (!selectedPkg) {
+      alert("يرجى اختيار الباقة المناسبة");
+      return;
+    }
+
+    var cleanPhone = phone.replace(/[\s\-\+]/g, "");
+    if (!/^\d{7,15}$/.test(cleanPhone)) {
+      alert("يرجى إدخال رقم واتساب صحيح");
+      return;
+    }
+
+    // التحقق من صحة الإيميل
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      alert("يرجى إدخال بريد إلكتروني صحيح");
+      return;
+    }
+
+    // تعطيل الزر أثناء الإرسال
+    var btn = document.getElementById("submitBtn");
+    btn.disabled = true;
+    btn.textContent = "جارٍ الإرسال...";
+
+    // الإيميل يُرسل تلقائياً عبر Google Sheets Script
+    btn.disabled = false;
+    btn.textContent = "تأكيد التسجيل ←";
+
+    // حفظ في Google Sheets
+    var SHEET_URL = "https://script.google.com/macros/s/AKfycbx8PKhFTq7Y-ZSsSzQ9DXnS4BuAy0Rmn8_8mCi48PWpUnrRpUD8QFLM5WGAXo9giRNqOg/exec";
+    var formData = new FormData();
+    formData.append("name", name);
+    formData.append("phone", cleanPhone);
+    formData.append("email", email);
+    formData.append("role", role);
+    formData.append("package", selectedPkg);
+    formData.append("notes", notes);
+    fetch(SHEET_URL, { method: "POST", body: formData })
+      .catch(function(e){ console.log("Sheet error:", e); });
+
+    // نغمة + popup
+    playDing();
+    showPopup();
+  }
+
+  function showPopup() {
+    document.getElementById("popupOverlay").classList.add("show");
+  }
+
+  function closePopup() {
+    document.getElementById("popupOverlay").classList.remove("show");
+    document.getElementById("formView").style.display = "none";
+    document.getElementById("successView").style.display = "block";
+  }
+
+  function registerAnother() {
+    selectedPkg = "";
+    document.getElementById("formView").style.display = "block";
+    document.getElementById("successView").style.display = "none";
+    document.getElementById("name").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("notes").value = "";
+    document.getElementById("role").value = "";
+    document.querySelectorAll('.pkg').forEach(function(p){ p.classList.remove('active'); });
+  }
+</script>
+</body>
+</html>
